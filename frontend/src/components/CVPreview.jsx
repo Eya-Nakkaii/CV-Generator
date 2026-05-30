@@ -1,4 +1,4 @@
-﻿const FONT = "'Inter', system-ui, sans-serif";
+const FONT = "'Inter', system-ui, sans-serif";
 
 const sectionTitle = {
   fontSize: "11px",
@@ -14,17 +14,31 @@ const sectionTitle = {
 };
 
 export default function CVPreview({ result, form }) {
-  const cv = result?.cv || {};
+  console.log("result reçu:", result);
+
+  const cv = result?.cv ?? null;
+
+  // Nom toujours depuis form, en majuscules via CSS
   const prenom = form?.prenom || "";
   const nom = form?.nom || "";
 
-  const formation = cv.formation || form?.formation || [];
-  const projets = cv.projets || form?.projets || [];
-  const competences = cv.competences
+  // Formation : result.cv si result existe, sinon form.formation
+  const formation = cv ? (cv.formation || []) : (form?.formation || []);
+
+  // Projets : result.cv si result existe, sinon form.projets
+  const projets = cv ? (cv.projets || []) : (form?.projets || []);
+
+  // Compétences : result.cv (tableau) si dispo, sinon form.competences (string)
+  const competences = cv?.competences
     ? (Array.isArray(cv.competences) ? cv.competences : cv.competences.split(","))
     : (form?.competences ? form.competences.split(",") : []);
-  const langues = form?.langues || "";
 
+  // Langues : result.cv (tableau) si dispo, sinon form.langues (string)
+  const langues = cv?.langues
+    ? (Array.isArray(cv.langues) ? cv.langues.join(", ") : cv.langues)
+    : (form?.langues || "");
+
+  // Contact toujours depuis form
   const contactParts = [
     form?.email,
     form?.tel,
@@ -61,7 +75,7 @@ export default function CVPreview({ result, form }) {
           boxSizing: "border-box",
         }}
       >
-        {/* Header */}
+        {/* Header — toujours depuis form */}
         <div>
           <div style={{ fontSize: "28px", fontWeight: 600, letterSpacing: "-0.01em", textTransform: "uppercase" }}>
             {prenom || <span style={{ color: "#cccccc" }}>PRENOM</span>}{" "}
@@ -81,13 +95,16 @@ export default function CVPreview({ result, form }) {
 
         <div style={{ borderBottom: "1.5px solid #111111", margin: "12px 0" }} />
 
-        {/* Profil */}
-        {cv.profil && (
-          <div>
-            <div style={sectionTitle}>Profil</div>
-            <p style={{ margin: 0, fontSize: "13px", color: "#333333" }}>{cv.profil}</p>
-          </div>
-        )}
+        {/* Profil — depuis result.cv.profil */}
+        {(() => {
+          console.log("cv.profil:", cv?.profil);
+          return cv?.profil ? (
+            <div>
+              <div style={sectionTitle}>Profil</div>
+              <p style={{ margin: 0, fontSize: "13px", color: "#333333" }}>{cv.profil}</p>
+            </div>
+          ) : null;
+        })()}
 
         {/* Formation */}
         {formation.filter(f => f.ecole || f.filiere).length > 0 && (

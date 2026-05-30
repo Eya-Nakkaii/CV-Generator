@@ -1,6 +1,8 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+dotenv.config();
+import Groq from "groq-sdk";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function generate(req, res) {
   const { prenom, nom, email, tel, adresse, statut,
@@ -8,42 +10,41 @@ export async function generate(req, res) {
           competences, langues, projets,
           entreprise, poste, messagePerso } = req.body;
 
-  const prompt = `Tu es un expert RH tunisien. Génère en français :
+  const prompt = `Tu es un expert RH. RÉÉCRIS et AMÉLIORE ce contenu pour un CV professionnel. Ne copie JAMAIS les données brutes.
 
-Données du candidat :
-- Nom complet : ${prenom} ${nom}
-- Contact : ${email} | ${tel} | ${adresse}
+Candidat :
+- Nom : ${prenom} ${nom}
 - Statut : ${statut}
 - Formation : ${JSON.stringify(formation)}
 - Compétences : ${competences}
 - Langues : ${langues}
-- Projets/Expériences : ${JSON.stringify(projets)}
-- Réseaux : LinkedIn: ${linkedin} | GitHub: ${github} | Portfolio: ${portfolio}
+- Projets : ${JSON.stringify(projets)}
 ${entreprise ? `- Lettre pour : ${entreprise}, poste : ${poste}` : ""}
-${messagePerso ? `- Message perso : ${messagePerso}` : ""}
+${messagePerso ? `- Motivation : ${messagePerso}` : ""}
 
 Réponds UNIQUEMENT en JSON valide sans texte avant ou après :
 {
   "cv": {
-    "profil": "3 phrases max",
+    "profil": "3 phrases percutantes",
     "formation": [{"ecole":"","filiere":"","annee":""}],
-    "projets": [{"titre":"","date":"","description":""}],
+    "projets": [{"titre":"","date":"","description":"2-3 phrases professionnelles"}],
     "competences": [""],
     "langues": [""]
   },
-  "lettre": "texte lettre complet ou null si pas d'entreprise"
+  "lettre": "3 paragraphes complets ou null"
 }`;
 
   try {
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      generationConfig: { responseMimeType: "application/json" }
+    const response = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "llama-3.3-70b-versatile",
+      response_format: { type: "json_object" }
     });
-    const result = await model.generateContent(prompt);
-    const text = result.response.text();
+
+    const text = response.choices[0].message.content;
     res.json(JSON.parse(text));
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erreur génération Gemini" });
+    res.status(500).json({ error: "Erreur génération" });
   }
 }

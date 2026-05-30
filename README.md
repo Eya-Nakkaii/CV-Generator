@@ -3,7 +3,7 @@
 Application web de génération automatique de CV et lettres de motivation propulsée par Llama 3.3 70B via Groq (LLM/Transformer).
 
 ## Démo vidéo
-[Cliquez ici pour voir la démo](https://drive.google.com/file/d/1c9qRNPhFS8uY7VJmLWKg3CdkR41BQi2s/view?usp=sharing)
+[Cliquez ici pour voir la démo](https://youtu.be/wIvv_iGZr8Q)
 
 ## Captures d'écran
 

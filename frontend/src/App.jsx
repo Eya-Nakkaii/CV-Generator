@@ -1,7 +1,6 @@
 ﻿import { useState } from "react";
 import HeroPage from "./components/HeroPage";
 import FormSection from "./components/FormSection";
-import { generateCV } from "./gemini";
 
 export default function App() {
   const [page, setPage] = useState("hero");
@@ -11,14 +10,19 @@ export default function App() {
   const handleGenerate = async (formData, mode) => {
     setLoading(true);
     try {
-      const data = await generateCV({
-        ...formData,
-        entreprise: mode === "cv" ? null : formData.entreprise,
-        poste: mode === "cv" ? null : formData.poste,
+      const res = await fetch("http://localhost:3001/api/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          entreprise: mode === "cv" ? null : formData.entreprise,
+          poste: mode === "cv" ? null : formData.poste,
+        }),
       });
+      const data = await res.json();
       setResult(data);
     } catch (e) {
-      alert("Erreur generation : " + e.message);
+      alert("Erreur serveur");
     }
     setLoading(false);
   };

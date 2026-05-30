@@ -3,9 +3,6 @@
 Application web de génération automatique de CV et lettres de
 motivation propulsée par Gemini 1.5 Flash (LLM/Transformer de Google).
 
-## Lien du site
-https://cv-generator-eya.vercel.app
-
 ## Modèle génératif utilisé
 - **Gemini 1.5 Flash** (Google) — LLM / Transformer
 - Génère : profil professionnel, amélioration des descriptions
@@ -19,22 +16,33 @@ https://cv-generator-eya.vercel.app
 - Export PDF en un clic
 
 ## Stack technique
-- Frontend : React + Vite (déployé sur Vercel)
+- Frontend : React + Vite
+- Backend : Node.js + Express
 - IA : Google Gemini 1.5 Flash API
 - PDF : html2pdf.js
 
 ## Lancer le projet en local
+
+### Backend
+```
+cd backend
+npm install
+node index.js
+```
+
+### Frontend
 ```
 cd frontend
 npm install
 npm run dev
 ```
+
 Ouvrir http://localhost:5173
 
 ## Variables d'environnement
-Créer `frontend/.env` :
+Créer `backend/.env` :
 ```
-VITE_GEMINI_API_KEY=ta_clé_api
+GEMINI_API_KEY=ta_clé_api
 ```
 
 ## Étudiante

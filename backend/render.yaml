@@ -1,0 +1,9 @@
+﻿services:
+  - type: web
+    name: cv-generator-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false

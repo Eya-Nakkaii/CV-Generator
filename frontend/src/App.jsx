@@ -1,14 +1,17 @@
-﻿import { useState } from "react";
+import { useState, useRef } from "react";
 import HeroPage from "./components/HeroPage";
 import FormSection from "./components/FormSection";
+import ResultPage from "./components/ResultPage";
 
 export default function App() {
   const [page, setPage] = useState("hero");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const lastForm = useRef(null);
 
   const handleGenerate = async (formData, mode) => {
     setLoading(true);
+    lastForm.current = formData;
     try {
       const res = await fetch("http://localhost:3001/api/generate", {
         method: "POST",
@@ -29,6 +32,16 @@ export default function App() {
 
   if (page === "hero") {
     return <HeroPage onStart={() => setPage("form")} />;
+  }
+
+  if (result !== null) {
+    return (
+      <ResultPage
+        result={result}
+        form={lastForm.current}
+        onRestart={() => { setResult(null); setPage("form"); }}
+      />
+    );
   }
 
   return (

@@ -439,66 +439,47 @@ export default function FormSection({ onGenerate, result, loading }) {
           </div>
         )}
 
-        <div style={{ marginTop: "32px", display: "flex", flexDirection: "column", gap: "12px" }}>
-          <div style={{ display: "flex", gap: "12px" }}>
-            <button
-              onClick={() => setStep(1)}
-              style={{
-                background: "#ffffff",
-                color: "#888888",
-                border: "1px solid #e8e8e6",
-                padding: "13px 24px",
-                fontSize: "14px",
-                cursor: "pointer",
-                fontFamily: FONT,
-                borderRadius: 0,
-                letterSpacing: "0.05em",
-                whiteSpace: "nowrap",
-              }}
-            >
-              RETOUR
-            </button>
-            <button
-              onClick={() => onGenerate(form, "cv")}
-              disabled={loading}
-              style={{
-                flex: 1,
-                background: loading ? "#555555" : "#111111",
-                color: "#ffffff",
-                border: "1px solid #111111",
-                padding: "13px 20px",
-                fontSize: "14px",
-                fontWeight: 500,
-                letterSpacing: "0.08em",
-                cursor: loading ? "not-allowed" : "pointer",
-                fontFamily: FONT,
-                borderRadius: 0,
-              }}
-            >
-              {loading ? "GENERATION EN COURS..." : "GENERER LE CV"}
-            </button>
-          </div>
-
-          {form.lettreActive && (
-            <button
-              onClick={() => onGenerate(form, "both")}
-              disabled={loading}
-              style={{
-                background: "transparent",
-                color: loading ? "#aaaaaa" : "#888888",
-                border: "1px solid #e8e8e6",
-                padding: "12px 20px",
-                fontSize: "14px",
-                letterSpacing: "0.08em",
-                cursor: loading ? "not-allowed" : "pointer",
-                fontFamily: FONT,
-                borderRadius: 0,
-                width: "100%",
-              }}
-            >
-              CV + LETTRE
-            </button>
-          )}
+        <div style={{ marginTop: "32px", display: "flex", gap: "12px" }}>
+          <button
+            onClick={() => setStep(1)}
+            style={{
+              background: "#ffffff",
+              color: "#888888",
+              border: "1px solid #e8e8e6",
+              padding: "13px 24px",
+              fontSize: "14px",
+              cursor: "pointer",
+              fontFamily: FONT,
+              borderRadius: 0,
+              letterSpacing: "0.05em",
+              whiteSpace: "nowrap",
+            }}
+          >
+            RETOUR
+          </button>
+          <button
+            onClick={() => onGenerate(form, form.lettreActive ? "both" : "cv")}
+            disabled={loading}
+            style={{
+              flex: 1,
+              background: loading ? "#555555" : "#111111",
+              color: "#ffffff",
+              border: "1px solid #111111",
+              padding: "13px 20px",
+              fontSize: "14px",
+              fontWeight: 500,
+              letterSpacing: "0.08em",
+              cursor: loading ? "not-allowed" : "pointer",
+              fontFamily: FONT,
+              borderRadius: 0,
+            }}
+          >
+            {loading
+              ? "GENERATION EN COURS..."
+              : form.lettreActive
+              ? "GENERER CV + LETTRE"
+              : "GENERER LE CV"}
+          </button>
         </div>
       </div>
     );

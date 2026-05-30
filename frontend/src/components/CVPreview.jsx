@@ -168,25 +168,6 @@ export default function CVPreview({ result, form }) {
           </div>
         )}
       </div>
-
-      <button
-        onClick={handleDownloadPDF}
-        style={{
-          background: "#111111",
-          color: "#ffffff",
-          border: "1px solid #111111",
-          padding: "13px 20px",
-          fontSize: "13px",
-          fontWeight: 500,
-          letterSpacing: "0.1em",
-          cursor: "pointer",
-          fontFamily: FONT,
-          borderRadius: 0,
-          width: "100%",
-        }}
-      >
-        TELECHARGER PDF
-      </button>
     </div>
   );
 }
